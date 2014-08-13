@@ -10,7 +10,7 @@ enum TokenType
     Value,
     StartParentCloseTag,
     StartParentOpenTag,
-    EndParentOpenTag,
+    EndParentAnyTag,
     StartSingleTag,
     EndSingleTag,
     EndOfFile
