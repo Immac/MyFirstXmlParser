@@ -1,14 +1,13 @@
 #include "lexicalanalyzer.h"
 Token LexicalAnalyzer::getNextToken()
 {
-    currentSymbol = myStringCycler.getNextSymbol();
     unsigned int currentState(0);
     std::string lexeme("");
     while(true)
     {
         switch (currentState) {
         case 0:
-            if(std::isspace(currentSymbol))
+            if(std::isspace(currentSymbol)&&currentSymbol != kEndOfFile)
             {
                 consumeSymbol();
                 currentState = 0;
@@ -21,40 +20,47 @@ Token LexicalAnalyzer::getNextToken()
             }
             else if (currentSymbol == kQuotes)
             {
+                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 3;
             }
             else if(currentSymbol == kEqualSign)
             {
+                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 5;
             }
             else if(currentSymbol == kGreaterThan)
             {
+                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 6;
             }
             else if(currentSymbol == kLessThan)
             {
+                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 7;
             }
             else if(currentSymbol == kForwardSlash)
             {
+                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 10;
             }
             else if(currentSymbol == kEndOfFile)
             {
+                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 12;
             }
             else
-                throw kExpectedKnownSymbol;
+                return Token{Error,kExpectedKnownSymbol};
             break;
         case 1:
             if(std::isalnum(currentSymbol))
             {
+                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 1;
             }
@@ -64,7 +70,7 @@ Token LexicalAnalyzer::getNextToken()
         case 2:
             return Token(Id,lexeme);
         case 3:
-            if(std::isalnum(currentSymbol) || std::isblank(currentSymbol))
+            if(std::isalnum(currentSymbol) || std::isspace(currentSymbol))
             {
                 lexeme += currentSymbol;
                 consumeSymbol();
@@ -72,12 +78,12 @@ Token LexicalAnalyzer::getNextToken()
             }
             else if(currentSymbol == kQuotes)
             {
-                   currentState = 4;
+                lexeme += currentSymbol;
+                consumeSymbol();
+                currentState = 4;
             }
             else
-            {
-                throw kExpectedQuoteOrAlphanum;
-            }
+                return Token{Error,kExpectedQuoteOrAlphanum};
             break;
 
         case 4:
@@ -95,28 +101,34 @@ Token LexicalAnalyzer::getNextToken()
             }
             else
                 currentState = 9;
+            break;
         case 8:
-            return Token{StartParentOpenTag,lexeme};
-        case 9:
             return Token{StartParentCloseTag,lexeme};
+        case 9:
+            return Token{StartParentOpenTag,lexeme};
         case 10:
             if(currentSymbol == kGreaterThan)
             {
+                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 11;
             }
             else
-                throw kExpectedGreaterThan;
+                return Token{Error,kExpectedGreaterThan};
             break;
         case 11:
             return Token{EndSingleTag,lexeme};
         case 12:
             return Token{EndOfFile,lexeme};
         default:
-            throw kUnexpectedError;
+            return Token{Error,kUnexpectedError};
             break;
         }
     }
 }
 
 
+void LexicalAnalyzer::consumeSymbol()
+{
+    currentSymbol = myStringCycler.getNextSymbol();
+}

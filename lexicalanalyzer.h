@@ -20,7 +20,8 @@ namespace
 class LexicalAnalyzer
 {
 public:
-    LexicalAnalyzer(std::string inputBuffer):myStringCycler(inputBuffer){}
+    LexicalAnalyzer(std::string inputBuffer):myStringCycler(inputBuffer)
+    {currentSymbol = myStringCycler.getNextSymbol();}
     Token getNextToken();
 private:
     StringCycler myStringCycler;
@@ -30,9 +31,5 @@ private:
     void consumeSymbol();
 };
 
-void LexicalAnalyzer::consumeSymbol()
-{
-    currentSymbol = myStringCycler.getNextSymbol();
-}
 
 #endif // LEXICALANALYZER_H
