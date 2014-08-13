@@ -1,9 +1,10 @@
 #ifndef STRINGCYCLER_H
 #define STRINGCYCLER_H
 #include <iostream>
-enum symbols{
-    eof = '\n'
-};
+namespace
+{
+    const char kEndOfFile = '\n';
+}
 class StringCycler
 {
 public:

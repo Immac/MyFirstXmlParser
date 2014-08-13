@@ -11,7 +11,7 @@ int main()
 {
     StringCycler myStringCycler(kTest1);
     auto currentChar = myStringCycler.getNextSymbol();
-    while(currentChar != eof)
+    while(currentChar != kEndOfFile)
     {
         std::cout << currentChar;
         currentChar = myStringCycler.getNextSymbol();

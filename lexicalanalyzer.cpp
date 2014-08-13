@@ -19,15 +19,19 @@ Token LexicalAnalyzer::getNextToken()
                 consumeSymbol();
                 currentState = 1;
             }
-            else if (std::isdigit(currentSymbol))
+            else if (currentSymbol == kQuotes)
             {
                 consumeSymbol();
                 currentState = 3;
             }
+            else if(currentSymbol == kEqualSign)
+            {
+                consumeSymbol();
+                currentState = 5;
+            }
         case 1:
             if(std::isalnum(currentSymbol))
             {
-                lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 1;
             }
@@ -37,14 +41,41 @@ Token LexicalAnalyzer::getNextToken()
         case 2:
             return Token(Id,lexeme);
         case 3:
-            if(std::isdigit(currentSymbol))
+            if(std::isalnum(currentSymbol) || std::isblank(currentSymbol))
             {
                 lexeme += currentSymbol;
                 consumeSymbol();
                 currentState = 3;
             }
+            else if(currentSymbol == kQuotes)
+            {
+                   currentState = 4;
+            }
             else
+            {
+                throw kExpectedQuoteOrAlphanum;
+            }
+            break;
+
+        case 4:
+            return Token{Value,lexeme};
+        case 5:
+            return Token{Equals,lexeme};
+        case 6:
+            if (currentSymbol == kForwardSlash)
+            {
+                lexeme += currentSymbol;
+                consumeSymbol();
                 currentState = 6;
+            }
+            else
+                currentState = 7;
+        case 6:
+            return Token{StartParentCloseTag,lexeme};
+        case 7:
+            return Token{StartParentOpenTag,lexeme};
+
+
 
         default:
             break;

@@ -4,16 +4,16 @@
 
 enum TokenType
 {
-    Addition,
-    Substraction,
-    Multiplication,
-    Division,
-    LeftParenthesis,
-    RightParenthesis,
     Id,
     Number,
-    EndOfFile,
-    Equals
+    Equals,
+    Value,
+    StartParentCloseTag,
+    StartParentOpenTag,
+    EndParentOpenTag,
+    StartSingleTag,
+    EndSingleTag,
+    EndOfFile
 };
 
 struct Token
