@@ -14,7 +14,6 @@ namespace
     const std::string kExpectedGreaterThan = std::string("Expected \" > \" symbol.");
     const std::string kExpectedKnownSymbol = std::string("This Symbol is not part of this Dictionary.");
     const std::string kUnexpectedError = std::string("Something went wrong, terribly wrong!.");
-
 }
 
 class LexicalAnalyzer

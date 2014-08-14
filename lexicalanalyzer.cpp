@@ -119,7 +119,7 @@ Token LexicalAnalyzer::getNextToken()
         case 11:
             return Token{EndSingleTag,lexeme};
         case 12:
-            return Token{EndOfFile,lexeme};
+            return Token{EndOfFile,"$"};
         default:
             return Token{Error,kUnexpectedError};
             break;
